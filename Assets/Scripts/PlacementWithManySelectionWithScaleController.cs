@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using TMPro;
 
 [RequireComponent(typeof(ARRaycastManager))]
 public class PlacementWithManySelectionWithScaleController : MonoBehaviour
@@ -23,18 +24,16 @@ public class PlacementWithManySelectionWithScaleController : MonoBehaviour
     private Slider scaleSlider;
 
     [SerializeField]
-    private Text scaleTextValue;
-
-    [SerializeField]
-    private Button toggleOptionsButton;
-
-    [SerializeField]
-    private GameObject options;
+    private TextMeshPro scaleTextValue;
 
     [SerializeField]
     private Camera arCamera;
 
-    private GameObject placedObject;
+    [SerializeField]
+    private Color activeColor = Color.red;
+
+    [SerializeField]
+    private Color inactiveColor = Color.gray;
 
     private Vector2 touchPosition = default;
 
@@ -48,18 +47,6 @@ public class PlacementWithManySelectionWithScaleController : MonoBehaviour
 
     private PlacementObject lastSelectedObject;
 
-    private GameObject PlacedPrefab 
-    {
-        get 
-        {
-            return placedPrefab;
-        }
-        set 
-        {
-            placedPrefab = value;
-        }
-    }
-
 
     void Awake() 
     {
@@ -67,22 +54,8 @@ public class PlacementWithManySelectionWithScaleController : MonoBehaviour
         aRSessionOrigin = GetComponent<ARSessionOrigin>();
         dismissButton.onClick.AddListener(Dismiss);
         scaleSlider.onValueChanged.AddListener(ScaleChanged);
-        toggleOptionsButton.onClick.AddListener(ToggleOptions);
     }
 
-    private void ToggleOptions()
-    {
-        if(options.activeSelf)
-        {
-            toggleOptionsButton.GetComponentInChildren<Text>().text = "O";
-            options.SetActive(false);
-        }
-        else 
-        {
-            toggleOptionsButton.GetComponentInChildren<Text>().text = "X";
-            options.SetActive(true);
-        }
-    }
 
     private void Dismiss() => welcomePanel.SetActive(false);
 
@@ -91,7 +64,7 @@ public class PlacementWithManySelectionWithScaleController : MonoBehaviour
         if(applyScalingPerObject){
             if(lastSelectedObject != null && lastSelectedObject.Selected)
             {
-                lastSelectedObject.transform.parent.localScale = Vector3.one * newValue;
+                lastSelectedObject.transform.localScale = Vector3.one * scaleSlider.value;
             }
         }
         else 
@@ -103,7 +76,7 @@ public class PlacementWithManySelectionWithScaleController : MonoBehaviour
     void Update()
     {
         // do not capture events unless the welcome panel is hidden or if UI is selected
-        if(welcomePanel.activeSelf || options.activeSelf)
+        if(welcomePanel.activeSelf)
             return;
 
         if(Input.touchCount > 0)
@@ -121,17 +94,26 @@ public class PlacementWithManySelectionWithScaleController : MonoBehaviour
                 RaycastHit hitObject;
                 if(Physics.Raycast(ray, out hitObject))
                 {
+                    
                     lastSelectedObject = hitObject.transform.GetComponent<PlacementObject>();
-                    if(lastSelectedObject != null)
+                    
+                    if (lastSelectedObject != null)
                     {
+
                         PlacementObject[] allOtherObjects = FindObjectsOfType<PlacementObject>();
                         foreach(PlacementObject placementObject in allOtherObjects)
                         {
-                            if(placementObject != lastSelectedObject){
+                            MeshRenderer meshRenderer = placementObject.GetComponent<MeshRenderer>();
+                            if (placementObject != lastSelectedObject){
                                 placementObject.Selected = false;
+                                meshRenderer.material.color = inactiveColor;
                             }
                             else
+                            {
                                 placementObject.Selected = true;
+                                meshRenderer.material.color = activeColor;
+                            }
+                            placementObject.ToggleOverlay();
                         }
                     }
                 }
