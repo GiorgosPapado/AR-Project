@@ -2,14 +2,15 @@
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using TMPro;
 
 public class TrackedImageInfoRuntimeMultipleManager : MonoBehaviour
 {
     [SerializeField]
-    private Text debugLog;
+    private TextMeshPro debugLog;
 
     [SerializeField]
-    private Text currentImageText;
+    private TextMeshPro currentImageText;
 
     [SerializeField]
     private Button firstButton, secondButton;
