@@ -27,22 +27,23 @@ public class TrackedImageInfoRuntimeSaveManager : MonoBehaviour
     private GameObject prefabOnTrack;
 
     [SerializeField]
-    private Vector3 scaleFactor = new Vector3(0.1f,0.1f,0.1f);
+    private Vector3 scaleFactor = new Vector3(0.1f, 0.1f, 0.1f);
 
     [SerializeField]
     private XRReferenceImageLibrary runtimeImageLibrary;
-    
-    private ARTrackedImageManager trackImageManager;
 
+    private ARTrackedImageManager trackImageManager;
+/*
     [SerializeField]
     private Texture2D firstTexture;
 
     [SerializeField]
     private Texture2D secondTexture;
-
+*/
     void Start()
     {
-        debugLog.text += "Creating Runtime Mutable Image Library\n";
+        HitEnemy george = gameObject.AddComponent<HitEnemy>();
+            debugLog.text += "Creating Runtime Mutable Image Library\n";
 
         trackImageManager = gameObject.AddComponent<ARTrackedImageManager>();
         trackImageManager.referenceLibrary = trackImageManager.CreateRuntimeLibrary(runtimeImageLibrary);
@@ -52,12 +53,12 @@ public class TrackedImageInfoRuntimeSaveManager : MonoBehaviour
         trackImageManager.enabled = true;
 
         trackImageManager.trackedImagesChanged += OnTrackedImagesChanged;
-        
+
         ShowTrackerInfo();
 
-        firstTextureButton.onClick.AddListener(() => StartCoroutine(AddImageJob(firstTexture)));
+        //firstTextureButton.onClick.AddListener(() => StartCoroutine(AddImageJob(firstTexture)));
 
-        secondTextureButton.onClick.AddListener(() => StartCoroutine(AddImageJob(secondTexture)));
+        //secondTextureButton.onClick.AddListener(() => StartCoroutine(AddImageJob(secondTexture)));
 
     }
     public void ShowTrackerInfo()
@@ -76,28 +77,28 @@ public class TrackedImageInfoRuntimeSaveManager : MonoBehaviour
     {
         trackImageManager.trackedImagesChanged -= OnTrackedImagesChanged;
     }
-
+/*
     public IEnumerator AddImageJob(Texture2D texture2D)
     {
         yield return null;
-        
+
         debugLog.text = string.Empty;
-    
+
         debugLog.text += "Adding image\n";
 
         jobLog.text = "Job Starting...";
 
-        var firstGuid = new SerializableGuid(0,0);
-        var secondGuid = new SerializableGuid(0,0);
-        
-        XRReferenceImage newImage = new XRReferenceImage(firstGuid, secondGuid, new Vector2(0.1f,0.1f), Guid.NewGuid().ToString(), texture2D);
-        
+        var firstGuid = new SerializableGuid(0, 0);
+        var secondGuid = new SerializableGuid(0, 0);
+
+        XRReferenceImage newImage = new XRReferenceImage(firstGuid, secondGuid, new Vector2(0.1f, 0.1f), Guid.NewGuid().ToString(), texture2D);
+
         try
         {
             Debug.Log(newImage.ToString());
 
             MutableRuntimeReferenceImageLibrary mutableRuntimeReferenceImageLibrary = trackImageManager.referenceLibrary as MutableRuntimeReferenceImageLibrary;
-            
+
             debugLog.text += $"TextureFormat.RGBA32 supported: {mutableRuntimeReferenceImageLibrary.IsTextureFormatSupported(TextureFormat.RGBA32)}\n";
 
             debugLog.text += $"TextureFormat size: {texture2D.width}px width {texture2D.height}px height\n";
@@ -105,7 +106,7 @@ public class TrackedImageInfoRuntimeSaveManager : MonoBehaviour
             AddReferenceImageJobState jobHandle = mutableRuntimeReferenceImageLibrary.ScheduleAddImageWithValidationJob(texture2D, Guid.NewGuid().ToString(), 0.1f);
 
 
-            while(!jobHandle.jobHandle.IsCompleted)
+            while (!jobHandle.jobHandle.IsCompleted)
             {
                 jobLog.text = "Job Running...";
             }
@@ -119,12 +120,12 @@ public class TrackedImageInfoRuntimeSaveManager : MonoBehaviour
             debugLog.text += $"trackImageManager.supportsMutableLibrary ({trackImageManager.subsystem.subsystemDescriptor.supportsMutableLibrary})\n";
             debugLog.text += $"trackImageManager.requiresPhysicalImageDimensions ({trackImageManager.subsystem.subsystemDescriptor.requiresPhysicalImageDimensions})\n";
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             debugLog.text = e.ToString();
         }
     }
-
+*/
     void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
     {
         foreach (ARTrackedImage trackedImage in eventArgs.added)
