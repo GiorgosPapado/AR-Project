@@ -116,7 +116,7 @@ MonoBehaviour:
   IsLocked: 0
   OverlayText: {fileID: 8077134528330625761}
   canvasComponent: {fileID: 7262340017819251183, guid: 9eb2e6746976dc642bf83cfc96647a1f, type: 3}
-  OverlayDisplayText: THATS A CUBE
+  OverlayDisplayText: Selected
 --- !u!54 &2802955666454029939
 Rigidbody:
   m_ObjectHideFlags: 0
