@@ -40,17 +40,10 @@ using UnityEngine.UI;
         /// </summary>
     public GameObject spawnedObject { get; private set; }
 
-    [SerializeField]
-    private GameObject welcomePanel;
-
-    [SerializeField]
-    private Button dismissButton;
-    private void Dismiss() => welcomePanel.SetActive(false);
 
     void Awake()
         {
             m_RaycastManager = GetComponent<ARRaycastManager>();
-            dismissButton.onClick.AddListener(Dismiss);
     }
 
         bool TryGetTouchPosition(out Vector2 touchPosition)
@@ -67,10 +60,6 @@ using UnityEngine.UI;
 
         void Update()
         {
-        // do not capture events unless the welcome panel is hidden
-        if (welcomePanel.activeSelf)
-            return;
-
         //do not spawn objs if not tracked
         if (!TryGetTouchPosition(out Vector2 touchPosition))
                 return;

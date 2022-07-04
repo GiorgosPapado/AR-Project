@@ -216,7 +216,7 @@ MonoBehaviour:
   m_LightEstimationMode: -1
   m_AutoFocus: 1
   m_LightEstimation: 0
-  m_FacingDirection: 1
+  m_FacingDirection: 2
 --- !u!114 &218413933
 MonoBehaviour:
   m_ObjectHideFlags: 0
